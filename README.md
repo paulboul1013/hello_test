@@ -2,6 +2,7 @@
 setting up git
 git command
 
-git status 
-git add 'file'
-git push
+git status \n
+git add 'file' \n
+git push \n
+
