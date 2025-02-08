@@ -1,9 +1,13 @@
 # hello_test
 
-在linux下修改github專案流程
+練習c語言語法
 
-git clone <url> (注意可能不要在root mode使用，有權限問題)
-git add
+# git的基本指令
+git init
+git clone <url>
 git status
-git commit -m ""
+git add
+git commit -m "說明"
+git commit --amend -m "新的提交说明"
+git log
 git push origin main

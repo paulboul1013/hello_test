@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "string.h": "c",
+        "iso646.h": "c",
+        "limits": "c",
+        "utility": "c"
+    }
+}
