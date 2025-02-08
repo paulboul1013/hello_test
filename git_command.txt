@@ -1,9 +1,0 @@
-git status
-git add 'file'
-git status
-git commit -m "statement"
-git status
-git push origin main
-
-
-do not git push origin main on the linux root mode, otherwise can not use git push

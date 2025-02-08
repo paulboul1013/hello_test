@@ -4,5 +4,6 @@
         "iso646.h": "c",
         "limits": "c",
         "utility": "c"
-    }
+    },
+    "python.REPL.enableREPLSmartSend": false
 }
