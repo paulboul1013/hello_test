@@ -2,38 +2,31 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-
+int add(int,int);
+int multiply(int,int);
+int cal(int (*)(int,int));
 int main()
 {
 
-
-    char *str[100];
-    char raw[5000];
-    char input[50];
-    int len=0;
-    int size=0;
-    while(1){
-        scanf("%s",input);
-        if (strcmp(input,"end")==0) break;
-        str[len]=raw+size;
-        strcpy(str[len],input);
-        size+=strlen(input)+1;
-        len++;
-    }
-
     
-    printf("\n");
 
 
-    for(int i=0;i<len;i++){
-        printf("%s ",str[i]);
-    }
-
-
-    printf("\n(%d %d)\n",len,size);
-
-    printf("\n");
 
     return 0;
+}
+
+int add(int a,int b){
+    return a+b;
+}
+
+int multiply(int a,int b){
+    return a*b;
+}
+
+int cal(int (*op)(int,int)){
+    int result=1;
+    for(int i=1;i<=5;i++){
+        result=op(result,i);
+    }
+    return result;
 }

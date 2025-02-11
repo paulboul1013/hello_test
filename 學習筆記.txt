@@ -1,0 +1,2 @@
+2/11 C語言入門 199集完成
+成功在vscode使用makefile
