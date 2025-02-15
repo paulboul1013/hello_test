@@ -1,3 +1,2 @@
- // if (!insert(table,key)){
-        //     printf("insertion failed for key %d \n",key);
-        // }
+,i, divisors[0]);
+            for(int n=1;divis
