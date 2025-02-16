@@ -3,7 +3,11 @@
         "string.h": "c",
         "iso646.h": "c",
         "limits": "c",
-        "utility": "c"
+        "utility": "c",
+        "unordered_set": "cpp",
+        "ostream": "cpp",
+        "vector": "cpp",
+        "iostream": "cpp"
     },
     "python.REPL.enableREPLSmartSend": false
 }
