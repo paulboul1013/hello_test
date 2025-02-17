@@ -1,4 +1,6 @@
-name="ada lovelac" #字首轉大寫
+from collections import OrderedDict
+from random import randint
+# name="ada lovelac" #字首轉大寫
 # print(name.title())
 
 
@@ -688,11 +690,256 @@ name="ada lovelac" #字首轉大寫
 # print(pets)
 
 
-favorite_places={"paul":["nfu","edu","lake big"],"kk":["germany","hole","big bbbb"],"handsome":["bobs","skt2","gg1"]}
+# favorite_places={"paul":["nfu","edu","lake big"],"kk":["germany","hole","big bbbb"],"handsome":["bobs","skt2","gg1"]}
 
-for name,place in favorite_places.items():
-    print("person:"+name)
+# for name,place in favorite_places.items():
+#     print("person:"+name)
     
-    for pp in place:
-        print("like place :"+pp)
+#     for pp in place:
+#         print("like place :"+pp)
+        
+
+
+# class dog():
+
+#     def __init__(self,name,age):
+#         self.name=name
+#         self.age=age
+
+#     def sit(self):
+#         print(self.name.title()+" is now sitting")
+
+#     def roll_over(self):
+#         print(self.name.title()+" rolled over!")
+
+    
+# my_dog=dog('whille',3)
+
+# print("my dog name is "+my_dog.name.title()+".")
+# print("my dog age is ",my_dog.age)
+
+# my_dog.sit()
+# my_dog.roll_over()
+
+# print("my dod is "+str(my_dog.age)+" year old.")
+
+# class restaurant():
+
+#     def __init__(self,r_name,c_type):
+#         self.r_name=r_name
+#         self.c_type=c_type
+#         self.number_reversed=0
+
+
+
+#     def describe_restaurant(self):
+#         print("this res is name:"+self.r_name)
+#         print("this res is type:"+self.c_type)
+
+#     def open_restaurant(self):
+#         print("the restaurant is openning")
+
+#     def set_number_served(self,number):
+#         self.number_reversed=number
+    
+#     def increase_number_served(self,number):
+#         self.number_reversed+=number
+
+
+# class ice_cream_stand(restaurant):
+
+#     def __init__(self,r_name,c_type):
+#         super().__init__(r_name,c_type)
+#         self.favors:str=""
+
+#     def update_favors(self,fav:str):
+#         self.favors:str=fav
+
+# ice=ice_cream_stand("paul","ice")
+# ice.update_favors("chocolate")
+# print(ice.favors)
+        
+
+# rr=restaurant("paul","chinese")
+# r2=restaurant("dona","korean")
+
+# rr.set_number_served(32)
+# rr.increase_number_served(100)
+# print(rr.number_reversed)
+
+# class Privileges():
+
+#     def __init__(self,privileges:str="can add post"):
+#         self.privileges=privileges
+
+#     def show_privileges(self):
+#         print(self.privileges)
+
+
+# class user():
+    
+#     def __init__(self,f_name,l_name):
+#         self.f_name=f_name
+#         self.l_name=l_name
+#         self.login_attemps=0
+
+#     def describle(self):
+#         print(self.f_name+" "+self.l_name)
+
+#     def greet_user(self,sex:str):
+#         full_name=self.f_name+" "+self.l_name
+#         print("hello "+sex+" "+full_name)
+
+#     def increment_login_attempts(self):
+#         self.login_attemps+=1
+
+#     def reset_login_attempts(self):
+#         self.login_attemps=0
+
+# class admin(user):
+
+#     def __init__(self,f_name,l_name):
+#         super().__init__(f_name,l_name)
+#         self.privileges=Privileges()
+
+
+
+    
+# p1=admin("paul","lin")
+# p1.privileges.privileges+=" can ban user"
+# p1.privileges.show_privileges()
+
+
+# p1=user("paul","lin")
+# p2=user("dona","ton") 
+
+# p1.describle()
+# p2.describle()
+
+# for i in range(0,10):       
+#     p1.increment_login_attempts()
+
+# print(p1.login_attemps)
+
+# p1.reset_login_attempts()
+
+# print(p1.login_attemps)
+
+
+# class car():
+
+#     def __init__(self,make,model,year):
+#         self.make=make
+#         self.model=model
+#         self.year=year
+#         self.odometer_read=0
+
+#     def get_desciptive(self)->str:
+
+#         long_name=str(self.make)+' '+str(self.model)+" "+str(self.year)
+
+#         return long_name.title()
+    
+#     def read_odometer(self):
+#         print("This car has "+str(self.odometer_read)+" miles on")
+
+        
+
+#     def update_odometer(self,mileage):
+#         if mileage >=self.odometer_read:
+#             self.odometer_read=mileage
+#         else:
+#             print("you can't roll back an odometer!")
+
+#     def increment_odometer(self,miles):
+#         self.odometer_read+=miles
+
+
+
+# my_new_car=car("audi","a4",2014)
+# print(my_new_car.get_desciptive())
+# my_new_car.update_odometer(32)
+# my_new_car.update_odometer(3)
+# my_new_car.increment_odometer(100)
+# my_new_car.read_odometer()
+
+# class Battery():
+
+#     def __init__(self,battery_size=70):
+#         self.battery_size=battery_size
+
+#     def describe_battery(self):
+#         print("This car has a "+str(self.battery_size)+" -KWh battery")
+
+#     def get_range(self):
+
+#         if self.battery_size==70:
+#             range=240
+
+#         elif self.battery_size==85:
+#             range=270
+
+#         message="This car can go approximately "+str(range)
+#         message+=" miles on a full charge"
+
+#         print(message)
+
+#     def update_battery(self):
+#         if self.battery_size!=85:
+#             self.battery_size=85
+
+        
+
+
+
+# class electric_car(car):
+    
+#     def __init__(self,make,model,year):
+#         super().__init__(make,model,year)
+#         self.battery=Battery()
+
+#     # def descirble_battery(self):
+#     #     print("This car has a "+str(self.battery_size)+" -KWh battery")
+
+#     def fill_gas_tank():
+#         print("This car doesn't need a gas tank!!")
+
+
+
+# my_tesla=electric_car('tesla','model s',2016)
+# print(my_tesla.get_desciptive())
+# my_tesla.battery.describe_battery()
+# my_tesla.battery.update_battery()
+# my_tesla.battery.get_range()
+
+
+# fav_language=OrderedDict()
+
+# fav_language['jen']="python"
+# fav_language['srarch']='c'
+# fav_language['edward']='ruby'
+# fav_language['phil']='python'
+
+# for name,language in fav_language.items():
+
+#     print(name.title()+" s favorite language is "+language.title()+".")
+
+
+
+
+class die():
+
+    def __init__(self,sides=6):
+        self.sides=sides
+
+    def roll_die(self):
+        
+        for i in range(0,10):
+            x=randint(1,self.sides)
+            
+            print(x)
+            
+
+d=die(10)
+d.roll_die()
         
