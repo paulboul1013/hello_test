@@ -1,4 +1,35 @@
 2/11 C語言入門 199集完成
 成功在vscode使用makefile
 
-為自己學git，學習到105頁
+為自己學git，學習到151頁
+
+
+git reset commit的編號 // 拆掉commit，還是可以恢復的
+
+git checkout file //恢復檔案
+
+git blame file //檢視程式是誰寫的
+git blame -L 5,10 file //顯示5到10行
+
+git log -p file //顯示檔案的過去修改紀錄
+
+git add -f file //強制add，忽略規則
+
+nano .gitignore //設定忽略規則
+
+如果在工作區新增目錄，發現git status沒變化，只要新增檔案就好
+
+git commit --amend --no-edit //追加檔案到最後一個commit
+
+git commit --amend -m "" //修改最後一個commit
+
+git rm file --cached //檔案不在被git追蹤
+
+git log --oneline --author="" //尋找作者紀錄
+
+git log --oneline --grep="" //尋找符合字樣紀錄
+
+git log --oneline --since="9am" --until="12am" //時間間段的紀錄
+
+
+
