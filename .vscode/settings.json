@@ -8,7 +8,12 @@
         "ostream": "cpp",
         "vector": "cpp",
         "iostream": "cpp",
-        "xiosbase": "c"
+        "xiosbase": "c",
+        "array": "c",
+        "string": "c",
+        "string_view": "c",
+        "xstring": "c",
+        "xutility": "c"
     },
     "python.REPL.enableREPLSmartSend": false
 }
