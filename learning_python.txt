@@ -1,0 +1,3 @@
+In python you can create class use like c++ with object oriented 
+In python you can use with open to open file and then mainpulate file with python ojbect
+In python you can use list to save data and operate list to do any operation
