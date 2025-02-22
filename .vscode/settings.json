@@ -13,7 +13,11 @@
         "string": "c",
         "string_view": "c",
         "xstring": "c",
-        "xutility": "c"
+        "xutility": "c",
+        "*.tcc": "c",
+        "istream": "c",
+        "streambuf": "c"
     },
-    "python.REPL.enableREPLSmartSend": false
+    "python.REPL.enableREPLSmartSend": false,
+    "C_Cpp.errorSquiggles": "disabled"
 }
