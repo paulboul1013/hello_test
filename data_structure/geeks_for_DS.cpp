@@ -3,6 +3,7 @@
 #include <unordered_set>
 #include <algorithm>
 #include <cmath>
+#include <stack>
 using namespace std;
 
 
@@ -47,6 +48,8 @@ void reverse_array(vector<int>&arr){
 
         right--;
     }
+
+    
 }
 
 void reverse_array_2(vector<int>&arr){
@@ -372,21 +375,380 @@ struct node *deletatposition(struct node *head,int pos){
 
 }
 
+node * delete_k(node *head,int k){
+    //if list is emtpy or k is 0
+    if (head==nullptr||k<=0){
+        return head;
+    }
+
+    node *curr=head;
+    node *prev=nullptr;
+
+    int count=0;
+
+    while(curr!=nullptr){
+        count++;
+
+        if (count%k==0){
+            if (prev!=nullptr){
+                prev->next=curr->next;
+            }
+            else{
+                head=curr->next;
+            }
+        }
+        else{
+            prev=curr;
+        }
+        curr=curr->next;
+    }
+
+    return head;
+}
+
+void printlist(node *head){
+    node *curr=head;
+    while(curr!=nullptr){
+        cout<<curr->data<<" ";
+        curr=curr->next;   
+    }
+}
+int getlength(node *head){
+    int length=0;
+    while(head){
+        length++;
+        head=head->next;
+    }
+    return length;
+}
+
+int getmiddle(node *head){
+    int length=getlength(head);
+
+    int mid_index=length/2;
+    while(mid_index--){
+        head=head->next;
+    }
+    return head->data;
+}
+
+int get_middle_2(struct node *head){
+    struct node *slow_ptr=head;
+    struct node *fast_ptr=head;
+
+    while(fast_ptr!=NULL&&fast_ptr->next!=NULL){
+        fast_ptr=fast_ptr->next->next;
+        slow_ptr=slow_ptr->next;
+    }
+
+    return slow_ptr->data;
+}
+
+int count_value_in_linklist(struct node *head,int key){
+    if (head==NULL){
+        return 0;
+    }
+    int ans=count_value_in_linklist(head->next,key);
+
+    if (head->data==key){
+        ans++;
+    }
+
+    return ans;
+    
+}
+
+int count_value_in_linklist_no_recursion(struct node *head,int key){
+    struct node *curr=head;
+    int count=0;
+    while(curr!=NULL){
+        if (curr->data==key){
+            count++;
+        }
+        curr=curr->next;
+    }
+    return count;
+}
+
+void printlist_circurly_list(struct node *curr,node *head){
+    if (head==nullptr){
+        return;
+    }
+    cout<<curr->data<<" ";
+
+    if (curr->next==head){
+        return;
+    }
+    
+    printlist_circurly_list(curr->next,head);
+}
+
+void printlist_circurly_list_no_recursion(struct node *head){
+    if (head==nullptr){
+        return;
+    }
+
+    struct node *curr=head;
+    do{
+        cout<<curr->data<<" ";
+        curr=curr->next;
+    }while(curr!=head);
+    cout<<endl;
+}
+
+bool isCircular(struct node *head){
+    if (!head){
+        return true;
+    }
+    
+    struct node *curr=head;
+    while(curr&&curr->next!=head){
+        curr=curr->next;
+    }
+
+    if (!curr){
+        return false;
+    }
+    
+    return true;
+}
+
+bool iscircular_slow_fast_ptr(struct node *head){
+    if (!head){
+        return true;
+    }
+
+    struct node *slow=head;
+    struct node *fast=head->next;
+
+    while(fast&&fast->next){
+        if (slow==fast){
+            return true;
+        }
+        slow=slow->next;
+        fast=fast->next->next;
+    }
+
+    return false;
+}
+
+int countnodes_circulrlist(struct node *head){
+    if (head==nullptr){
+        return 0;
+    }
+
+    struct node *curr=head;
+    int result=0;
+    do{
+        curr=curr->next;
+        result++;
+    }while(curr!=head);
+
+    return result;
+}
+
+node *delet_first_node_circulr_list(struct node *last){
+    if (last==nullptr){
+        cout<<"List is empty "<<endl;
+        return nullptr;
+    }
+
+    struct node *head=last->next;
+    
+    if (head==last){
+        delete head;
+        last=nullptr;
+    }else{
+        last->next=head->next;
+        delete head;
+    }
+
+    return last;
+    
+}
+
+
+void print_list_circular(struct node *last){
+    if (last==NULL){
+        return;
+    }
+    struct node *head=last->next;
+
+    while(true){
+        cout<<head->data<<" ";
+        head=head->next;
+        if (head==last->next) break;
+    }
+    cout<<endl;
+}
+
+struct node * delete_specific_node(struct node *last,int key){
+    if (last==nullptr){
+        cout<<"list is empty , nothing to delete"<<endl;
+        return nullptr;
+    }
+
+    node *curr=last->next;
+    node *prev=last;
+
+    if (curr==last&&curr->data==key){
+        delete curr;
+        last=nullptr;
+        return last;
+    }
+
+    if (curr->data==key){
+        last->next=curr->next;
+        delete curr;
+        return last;
+    }
+
+    while(curr!=last&&curr->data!=key){
+        prev=curr;
+        curr=curr->next;
+    }
+
+    if (curr->data==key){
+        prev->next=curr->next;
+        if (curr==last){
+            last=prev;
+        }
+        delete  curr;
+    }else{
+        cout<<"Node with data "<<key<<" not found."<<endl;
+    }
+
+    return last;
+}
+
+void convert_singlelist_to_circularlist(struct node *curr,struct node *head){
+    if (curr->next==nullptr){
+        curr->next=head;
+        return;
+    }
+
+    convert_singlelist_to_circularlist(curr->next,head);
+}
+
+
+struct node * convert_singlelist_to_circularlist_no_recursion(struct node *head){
+    struct node *curr=head;
+
+    while(curr->next!=NULL){
+        curr=curr->next;
+    }
+    curr->next=head;
+
+    return head;
+}
+
+struct node *exchangesnodes(struct node *head){
+       // If list is of length less than 2
+       if (head == NULL || head->next == NULL) {
+        return head;
+    }
+    node* tail = head;
+   
+    // Find pointer to the last node
+    while (tail->next != head) {
+        tail = tail->next;
+    }
+    /* Exchange first and last nodes using
+       head and p */
+   
+    // temporary variable to store
+    // head data
+    int temp = tail->data; 
+    tail->data = head->data;
+    head->data = temp;
+    return head;
+}
+
+struct node *reverselist(struct node *head){
+    struct node *curr=head;
+    struct node *prev=nullptr,*next;
+
+    while(curr!=nullptr){
+        next=curr->next;
+
+        curr->next=prev;
+
+        prev=curr;
+
+        curr=next;
+    }
+
+    return prev;
+}
+
+struct node *reverselist_2(struct node *head){
+    if (head==NULL||head->next==NULL){
+        return head;
+    }
+    struct node *reset=reverselist_2(head->next);
+
+    head->next->next=head;
+    head->next=NULL;
+    
+    return reset;
+}
+
+struct node *reverselist_stack(struct node *head){
+    stack<node*> s;
+    struct node *temp=head;
+    while(temp->next!=NULL){
+        s.push(temp);
+        temp=temp->next;
+    }
+
+    head=temp;
+
+    while(!s.empty()){
+        temp->next=s.top();
+        
+        s.pop();
+
+        temp=temp->next;
+    }
+
+    temp->next=NULL;
+
+    return head;
+}
+
+void pairwiseswap(struct node *head){
+    if (head==nullptr||head->next==nullptr){
+        return;
+    }
+
+    swap(head->data,head->next->data);
+
+    pairwiseswap(head->next->next);
+}
+
+void paireiseswap_2(struct node *head){
+    struct node *curr=head;
+    while(curr!=nullptr&&curr->next!=nullptr){
+        swap(curr->data,curr->next->data);
+        curr=curr->next->next;
+    }
+}
 
 int main(){
+    node* head = new node(1);
+    head->next = new node(2);
+    head->next->next = new node(3);
+    head->next->next->next = new node(4);
+    head->next->next->next->next = new node(5);
+    head->next->next->next->next->next = new node(6);
 
-    vector<int> arr = {1, 2, 0, 4, 3, 0, 5, 0};
-    pushzerostoend_3(arr);
-
-
-    for(int i = 0; i < arr.size(); i++) 
-    cout << arr[i] << " ";
+    printlist(head);
     cout<<endl;
 
+    paireiseswap_2(head);
 
-
-
-
+    
+    printlist(head);
     
     return 0;
 }
