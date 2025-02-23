@@ -9,3 +9,5 @@ config/database.yml
 *.tmp
 
 *.o
+
+*.exe
