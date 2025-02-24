@@ -18,7 +18,20 @@
         "istream": "c",
         "streambuf": "c",
         "list": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "initializer_list": "cpp",
+        "type_traits": "cpp",
+        "unordered_map": "cpp",
+        "memory": "cpp",
+        "optional": "cpp",
+        "fstream": "cpp",
+        "sstream": "cpp",
+        "functional": "cpp",
+        "tuple": "cpp",
+        "exception": "cpp",
+        "ios": "cpp",
+        "iterator": "cpp",
+        "xhash": "cpp"
     },
     "python.REPL.enableREPLSmartSend": false,
     "C_Cpp.errorSquiggles": "disabled"
