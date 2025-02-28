@@ -1,1 +1,3 @@
-rotate_array_2
+    for (auto &x:arr){
+        ++x;
+    }

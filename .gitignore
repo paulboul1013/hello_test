@@ -11,3 +11,7 @@ config/database.yml
 *.o
 
 *.exe
+
+*.jpg
+*.png
+*.jpeg
