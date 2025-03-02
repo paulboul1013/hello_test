@@ -63,7 +63,11 @@
         "xlocnum": "cpp",
         "xmemory": "cpp",
         "xstddef": "cpp",
-        "xtr1common": "cpp"
+        "xtr1common": "cpp",
+        "stack": "cpp",
+        "queue": "cpp",
+        "map": "cpp",
+        "xtree": "cpp"
     },
     "python.REPL.enableREPLSmartSend": false,
     "C_Cpp.errorSquiggles": "disabled"
