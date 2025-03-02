@@ -125,8 +125,8 @@ namespace Math{
             return vector_3(x+vec.x,y+vec.y,z+vec.z);
         }
 
-        vector_3 operator-(const vector_3 &vec){
-            return vector_3(x+vec.x,y-vec.y,z-vec.z);
+        vector_3 operator-(const vector_3 &vec)const{
+            return vector_3(x-vec.x,y-vec.y,z-vec.z);
         }
 
         vector_3 & operator+=(const vector_3& vec){
@@ -218,7 +218,7 @@ namespace Math{
         }
 
         vector_4 operator-(const vector_4 &vec){
-            return vector_4(x+vec.x,y-vec.y,z-vec.z,w-vec.w);
+            return vector_4(x-vec.x,y-vec.y,z-vec.z,w-vec.w);
         }
 
         vector_4 & operator+=(const vector_4& vec){
@@ -340,6 +340,40 @@ namespace Math{
 
     extern float vec4_length(const vector_4 &vec);
 
+    extern matrix_4x4 matrix_multiply(const matrix_4x4&leftmatrix,const matrix_4x4 & rightmatrix);
+ 
+    extern vector_4 matrix_multiply(const matrix_4x4 &leftmatrix,const vector_4 &rightcolumnvec);
 
+    extern matrix_4x4 matrix_translation(float dx,float dy,float dz);
+
+    extern matrix_4x4 matrix_rotation_x(float angle);
     
+    extern matrix_4x4 matrix_rotation_y(float angle);
+
+    extern matrix_4x4 matrix_rotation_z(float angle);
+
+    extern matrix_4x4 matrix_yaw_pitch_rolll(float yaw_y,float pitch_x,float roll_z);
+
+    extern matrix_4x4 matrix_perspective_projection(float angle_y,float aspec_ratio,float near_planz,float far_planez);
+
+    extern matrix_4x4 matrix_transpose(const matrix_4x4 & inmatrix);
+
+    extern UINT clamp(UINT val,UINT min,UINT max);
+
+    extern float clamp(float val,float min,float max);
+
+    extern vector_2 clamp(const vector_2 &val,const vector_2 &min,const vector_2 &max);
+
+    extern vector_3 clamp(const vector_3 &val,const vector_3 &min,const vector_3 &max);
+
+    extern BYTE lerp(BYTE start,BYTE end,float t);
+    
+    extern float lerp(float start,float end,float t);
+
+    extern vector_2 lerp(const vector_2 & start,const vector_2 &end ,float t);
+
+    extern vector_3 lerp(const vector_3 & start,const vector_3 &end ,float t);
+
+    extern BOOL intersect_ray_aabb(const vector_3 & raystart,const vector_3 & rayend,const bounding_box & box,vector_3 &outintersectpoint,BOOL testfrontside);
+
 }
