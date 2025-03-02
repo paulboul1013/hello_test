@@ -4,6 +4,10 @@
 #include <unordered_set>
 #include <list>
 #include <cstring>
+#include <stack>
+#include <queue>
+#include <climits>
+#include <map>
 
 using namespace std;
 
@@ -546,16 +550,621 @@ string find_LCS(string str1,string str2){
     return lcs;
 }
 
+Node * reverse_k_group(Node *head,int k){
+    if (!head||k==1){
+        return head;
+    }
+
+    stack<Node*> st;
+    Node *curr=head;
+    Node *prev=nullptr;
+
+    while(curr!=nullptr){
+        int count=0;
+
+        while(curr!=nullptr&&count<k){
+            st.push(curr);
+            curr=curr->next;
+            count++;
+        }
+
+        while(!st.empty()){
+            if (prev==nullptr){
+                prev=st.top();
+                head=prev;
+                st.pop();
+            }else{
+                prev->next=st.top();
+                prev=prev->next;
+                st.pop();
+            }
+        }
+    }
+
+    prev->next=nullptr;
+
+    return head;
+}
+
+Node *reverse_k_group_2(Node *head,int k){
+    if (head==nullptr){
+        return head;
+    }
+
+    Node *curr=head;
+    Node *new_head=nullptr;
+    Node *tail=nullptr;
+
+
+    while(curr!=nullptr){
+        Node *group_head=curr;
+        Node *prev=nullptr;
+        Node *next_node=nullptr;
+        int count=0;
+
+        while(curr!=nullptr&&count<k){
+            next_node=curr->next;
+            curr->next=prev;
+            prev=curr;
+            curr=next_node;
+            count++;
+        }
+
+        if (new_head==nullptr){
+            new_head=prev;
+        }
+
+        if (tail!=nullptr){
+            tail->next=prev;
+        }
+
+        tail=group_head;
+    }
+
+    return new_head;
+    
+}
+
+class STACK{
+    private:
+        Node *head;
+
+    public:
+        STACK(){
+            this->head=nullptr;
+        }
+
+        bool isempty(){
+            return head==nullptr;
+        }
+
+        void push(int new_data){
+            Node *new_node=new Node(new_data);
+
+            if (!new_node){
+                cout<<"\nStack overflow"<<endl;
+            }
+
+            new_node->next=head;
+
+            head=new_node;
+            
+        }
+
+        void pop(){
+            if (this->isempty()){
+                cout<<"\nstack underflow"<<endl;
+            }else{
+                Node *temp=head;
+
+                head=head->next;
+
+                delete temp;
+            }
+        }
+
+        int peek(){
+            if (!isempty()){
+                return head->data;
+            }else{
+                cout<<"\nstack is empty"<<endl;
+                return INT_MIN;
+            }
+        }
+};
+
+class QUEUE{
+    Node *front,*rear;
+
+    public:
+        QUEUE(){
+            front=rear=nullptr;
+        }
+
+        bool isempty(){
+            if (front==nullptr){
+                return true;
+            }
+
+            return false;
+        }
+
+        void enqueue(int new_data){
+            Node *new_node=new Node (new_data);
+
+            if (this->isempty()){
+                front=rear=new_node;
+                return;
+            }
+
+            rear->next=new_node;
+            rear=new_node;
+        }
+
+        void dequeue(){
+            if (this->isempty()){
+                cout<<"Queue underflow\n";
+                return;
+            }
+
+            Node *temp=front;
+            front=front->next;
+
+            if (front==nullptr){
+                rear=nullptr;
+            }
+
+            delete temp;
+        }
+
+        int getfront(){
+            if (this->isempty()){
+                return INT_MIN;
+            }
+
+            return front->data;
+        }
+
+        int getrear(){
+            if (this->isempty()){
+                cout<<"queue is empty"<<endl;
+                return INT_MIN;
+            }
+
+            return rear->data;
+        }
+};
+
+
+vector<vector<int>> merge_arrays(vector<vector<int>>&nums1,vector<vector<int>>&nums2){
+    map<int,int> sum;
+
+    for(auto nums:nums1){
+        sum[nums[0]]=nums[1];
+    }
+
+    for(auto nums:nums2){
+        sum[nums[0]]+=nums[1];
+    }
+
+    vector<vector<int>> merge;
+
+    for(auto it:sum){
+        merge.push_back({it.first,it.second});
+    }
+
+    return merge;
+}
+
+void test_merge_array(){
+    vector<vector<int>> v1;
+
+    v1={{1,2},
+        {2,3},
+        {4,5}};
+
+    vector<vector<int>> v2;
+    v2={
+        {1,4},
+        {3,2},
+        {4,1}
+
+    };
+    vector<vector<int>>::iterator it;
+
+    vector<vector<int>> v3;
+    v3=merge_arrays(v1,v2);
+
+
+    cout<<v3.size()<<endl;
+
+    for(it=v3.begin();it!=v3.end();it++){
+
+        vector<int> inner=*it;
+        
+        for(vector<int>::iterator it=inner.begin();it!=inner.end();++it){
+            cout<<" "<<*it;
+        }
+        cout<<endl;
+    }
+    cout<<endl;
+}
+
+bool bfs(int start,vector<vector<int>> &adj,vector<bool> &visited){
+    queue<pair<int,int>> q;
+    q.push({start,-1});
+    visited[start]=true;
+
+    while(!q.empty()){
+        int node=q.front().first;
+        int parent=q.front().second;
+        q.pop();
+
+        for(int neighbor:adj[node]){
+            if (!visited[neighbor]){
+                visited[neighbor]=true;
+                q.push({neighbor,node});
+            }
+
+            else if (neighbor!=parent){
+                return true;
+            }
+        }
+
+        
+    }
+
+    return false;
+
+    
+}
+
+bool iscycle(vector<vector<int>> & adj){
+    int n=adj.size();
+    vector<bool> visited(n,false);
+
+    for(int i=0;i<n;i++){
+        if (!visited[i]){
+            if (bfs(i,adj,visited)){
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+void bsf_for_search(vector<vector<int>> &adj,int s){
+    queue<int> q;
+
+    vector<bool> visisted(adj.size(),false);
+
+    visisted[s]=true;
+    q.push(s);
+    
+    while(!q.empty()){
+        int curr=q.front();
+        q.pop();
+
+        cout<<curr<<" ";
+
+        for(int node:adj[curr]){
+            if(!visisted[node]){
+                visisted[node]=true;
+                q.push(node);
+            }
+        }
+    }
+}
+
+void add_edge(vector<vector<int>> &adj,int u,int v){
+    adj[u].push_back(v);
+    adj[v].push_back(u); //undirected graph
+}
+
+
+void bfs_for_disconnected(vector<vector<int>> &adj,int s,vector<bool> &visisted){
+    queue<int> q;
+    visisted[s]=true;
+    q.push(s);
+
+    while(!q.empty()){
+        int curr=q.front();
+        q.pop();
+        cout<<curr<<" ";
+
+        for(int node:adj[curr]){
+            if (!visisted[node]){
+                visisted[node]=true;
+                q.push(node);
+            }
+        }
+    }
+}
+
+void bfs_disconnected(vector<vector<int>> &adj){
+    vector<bool> visisted(adj.size(),false);
+
+    for(int i=0;i<adj.size();i++){
+        if (!visisted[i]){
+            bfs_for_disconnected(adj,i,visisted);
+        }
+    }
+}
+
+class tree_node{
+  public:
+    int data;
+    tree_node *left,*right;
+    
+    tree_node(int x){
+        data=x;
+        left=right=nullptr;
+    }
+};
+
+
+void recursive_right_view(tree_node *root,int level,int &maxlevel,vector<int> &result){
+    if (!root)return;
+
+    if (level>maxlevel){
+        result.push_back(root->data);
+        maxlevel=level;
+    }
+
+    recursive_right_view(root->right,level+1,maxlevel,result);
+
+    recursive_right_view(root->left,level+1,maxlevel,result);
+
+
+}
+
+vector<int> rightview(tree_node *root){
+    vector<int> result;
+
+    int maxlevel=-1;
+
+    recursive_right_view(root,0,maxlevel,result);
+
+    return result;
+}
+
+void printarray(vector<int> &arr){
+    for(auto val:arr){
+        cout<<val<<" ";
+    }
+    cout<<endl;
+}
+
+int partition(vector<int>&arr,int low,int high){
+    int pivot=arr[high];
+
+    int i=low-1;
+
+    for(int j=low;j<=high;j++){
+        if (arr[j]<pivot){
+            i++;
+            swap(arr[i],arr[j]);
+        }
+    }
+
+    swap(arr[i+1],arr[high]);
+    return i+1;
+}
+
+int partition_r(vector<int> &arr,int low,int high);
+
+void quicksort(vector<int> &arr,int low,int high){
+    if (low<high){
+        int pi=partition(arr,low,high);
+
+        quicksort(arr,low,pi-1);
+        quicksort(arr,pi+1,high);
+    }
+}
+
+void heapify(vector<int>&arr,int n,int i){
+    int largest=i;
+
+    int l=2*i+1;
+
+    int r=2*i+2;
+
+    if (l<n&&arr[l]>arr[largest]){
+        largest=l;
+    }
+
+    if (r<n&&arr[r]>arr[largest]){
+        largest=r;
+    }
+
+    if (largest!=i){
+        swap(arr[i],arr[largest]);
+
+        heapify(arr,n,largest);
+    }
+}
+
+void heapsort(vector<int>&arr){
+    int n=arr.size();
+
+    for(int i=n/2-1;i>=0;i--){
+        heapify(arr,n,i);
+    }
+
+    for(int i=n-1;i>0;i--){
+        swap(arr[0],arr[i]);
+        heapify(arr,i,0);
+    }
+}
+
+void merge(vector<int>&arr,int left,int mid,int right){
+    int n1=mid-left+1;
+    int n2=right-mid;
+
+    vector<int> L(n1),R(n2);
+
+    for(int i=0;i<n1;i++){
+        L[i]=arr[left+i];
+    }
+    for(int j=0;j<n2;j++){
+        R[j]=arr[mid+1+j];
+    }
+
+    int i=0,j=0;
+    int k=left;
+
+    while (i<n1&&j<n2){
+        if (L[i]<=R[j]){
+            arr[k]=L[i];
+            i++;
+        }else{
+            arr[k]=R[j];
+            j++;
+        }
+        k++;
+    }
+
+    while(i<n1){
+        arr[k]=L[i];
+        i++;
+        k++;
+    }
+
+    while(j<n2){
+        arr[k]=R[j];
+        j++;
+        k++;
+    }
+    
+}
+
+void mergesort(vector<int>&arr,int left,int right){
+    if (left>=right){
+        return;
+    }
+    int mid=left+(right-left)/2;
+    mergesort(arr,left,mid);
+    mergesort(arr,mid+1,right);
+    merge(arr,left,mid,right);
+}
+
+void insertsort(vector<int> &arr,int n){
+    for(int i=1;i<n;i++){
+        int key=arr[i];
+
+        int j=i-1;
+        while(j>=0&&arr[j]>key){
+            arr[j+1]=arr[j];
+            j--;
+        }
+        arr[j+1]=key;
+    }
+
+}
+
+const int run=32;
+
+void insertion_sort_v2(int arr[],int left,int right){
+    for(int i=left+1;i<=right;i++){
+        int temp=arr[i];
+        int j=i-1;
+        while(j>=left&&arr[j]>temp){
+            arr[j+1]=arr[j];
+            j--;
+        }
+        arr[j+1]=temp;
+    }
+}
+
+void merge_v2(int arr[],int l,int m,int r){
+    int len1=m-l+1;
+    int len2=r-m;
+    int left[len1];
+    int right[len2];
+    for(int i=0;i<len1;i++){
+        left[i]=arr[l+i];
+    }
+    for(int i=0;i<len2;i++){
+        right[i]=arr[m+1+i];
+    }
+
+    int i=0;
+    int j=0;
+    int k=l;
+
+    while(i<len1&&j<len2){
+        if (left[i]<=right[j]){
+            arr[k]=left[i];
+            i++;
+        }
+        else{
+            arr[k]=right[j];
+            j++;
+        }
+        k++;
+    }
+
+    while(i<len1){
+        arr[k]=left[i];
+        i++;
+        k++;
+    }
+    while(j<len2){
+        arr[k]=right[j];
+        j++;
+        k++;
+    }
+
+}
+
+
+void timsort(int arr[],int n){
+    for(int i=0;i<n;i+=run){
+        insertion_sort_v2(arr,i,min((i+run-1),(n-1)));
+    }
+
+    for(int size=run;size<n;size=2*size){
+        for(int left=0;left<n;left+=2*size){
+            int mid=left+size-1;
+
+            int right=min((left+2*size-1),(n-1));
+
+            if (mid<right){
+                merge_v2(arr,left,mid,right);
+            }
+        }
+    }
+
+}
+
 int main(){
 
-    string str1="abac";
-    string str2="cab";
-    
-    string str3=find_LCS(str1,str2);
-    cout<<"longest substring:"<<str3<<endl;
+    int arr[] = { -2, 7,  15,  -14, 0, 15,  0, 7, 
+        -7, -4, -13, 5,   8, -14, 12 }; 
+
     
 
-	
+
+    int n=sizeof(arr)/sizeof(arr[0]);
+
+
+    for(int i=0;i<n;i++){
+        cout<<arr[i]<<" ";
+    }
+
+    cout<<endl;
+
+    timsort(arr,n);
+
+
+    for(int i=0;i<n;i++){
+        cout<<arr[i]<<" ";
+    }
+
+    cout<<endl;
+
+    
 
 
     return 0;
