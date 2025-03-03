@@ -1138,33 +1138,53 @@ void timsort(int arr[],int n){
 
 }
 
+//use pivot to split two less pivot than array or bigger than pivot array 
+vector<int> pivotArray(vector<int> & nums,int pivot){
+    vector<int> result(nums.size(),0);
+
+    int left=0;
+    int right=nums.size()-1;
+
+    //check numbers to less than pivot array or bigger than pivot array
+    for(int i=0,j=nums.size()-1;i<nums.size()-1;++i,--j){
+        if (nums[i]<pivot){
+            result[left]=nums[i];
+            left++;
+        }
+
+        if (nums[j]>pivot){
+            result[right]=nums[i];
+            right--;
+        }
+    }
+
+    //insert pivot to correct index , maybe have same pivot number
+    while (left<=right){
+        result[left]=pivot;
+        left++;
+    }
+
+    return result;
+}
+
 int main(){
 
-    int arr[] = { -2, 7,  15,  -14, 0, 15,  0, 7, 
-        -7, -4, -13, 5,   8, -14, 12 }; 
 
-    
+    vector<int> arr;
+    for(int i=0;i<50;i++){
+        arr.push_back(50-i+33%43*3);
+    }
 
-
-    int n=sizeof(arr)/sizeof(arr[0]);
-
-
-    for(int i=0;i<n;i++){
+    for(int i=0;i<arr.size();i++){
         cout<<arr[i]<<" ";
     }
 
-    cout<<endl;
+    cout<<"---------------"<<endl;
 
-    timsort(arr,n);
-
-
-    for(int i=0;i<n;i++){
+    arr=pivotArray(arr,111);
+    for(int i=0;i<arr.size();i++){
         cout<<arr[i]<<" ";
     }
-
-    cout<<endl;
-
-    
 
 
     return 0;
