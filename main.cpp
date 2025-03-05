@@ -1167,25 +1167,70 @@ vector<int> pivotArray(vector<int> & nums,int pivot){
     return result;
 }
 
+//newton way sqrt
+int newton_sqrt(int n){
+    if (n==0){
+        return 0;
+    }
+    if (n<4){
+        return 1;
+    }
+
+    unsigned int ans=n/2;
+
+    if (ans>65535){ //protect overflow
+        ans=65535;
+    }
+
+    while (ans * ans > n || (ans + 1 )*(ans+1) <= n){
+        ans=(ans+n/ans)/2;
+    }
+
+    return ans;
+}
+
+float Q_rsqrt( float number )
+{
+	long i;
+	float x2, y;
+	const float threehalfs = 1.5F;
+
+	x2 = number * 0.5F;
+	y  = number;
+	i  = * ( long * ) &y;						// evil floating point bit level hacking
+	i  = 0x5f3759df - ( i >> 1 );               // what the fuck?
+	y  = * ( float * ) &i;
+	y  = y * ( threehalfs - ( x2 * y * y ) );   // 1st iteration
+//	y  = y * ( threehalfs - ( x2 * y * y ) );   // 2nd iteration, this can be removed
+    
+	return y;
+}
+
+
+//n分鐘有多少方塊產生
+
+long long coloredcells(int n){
+    if (n==1) return 1;
+    return coloredcells(n-1)+4*(n-1);
+}
+
+long long coloredcells_v2(int n){
+    long long prev1=1;
+    long long curr=prev1;
+    for(int i=2;i<=n;i++){
+        curr=prev1+4*(i-1);
+        prev1=curr;
+    }
+
+    return curr;
+}
+
 int main(){
 
+    long long number=100;
 
-    vector<int> arr;
-    for(int i=0;i<50;i++){
-        arr.push_back(50-i+33%43*3);
-    }
 
-    for(int i=0;i<arr.size();i++){
-        cout<<arr[i]<<" ";
-    }
-
-    cout<<"---------------"<<endl;
-
-    arr=pivotArray(arr,111);
-    for(int i=0;i<arr.size();i++){
-        cout<<arr[i]<<" ";
-    }
-
+    cout<<coloredcells_v2(number)<<endl;
 
     return 0;
 }
