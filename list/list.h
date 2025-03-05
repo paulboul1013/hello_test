@@ -182,13 +182,16 @@ static inline void list_move_tail(struct list_head *node,struct list_head *head)
 
 //獲取第一個node
 #define list_first_entry(head,type,member) \
-    list_entry((head)->next,type,member);
+    list_entry((head)->next,type,member)
 
 //獲取最後一個node
 #define list_last_entry(head,type,member) \
-    list_entry((head)->prev,type,member);
+    list_entry((head)->prev,type,member)
 
 
 #define list_for_each_entry(entry,head,member) for (entry=(void*)1;sizeof(struct {int i: -1;}); ++(entry))
+
+#define list_for_each(node,head) \
+    for (node=(head)->next;node!=(head);node=node->next)
 
 #define list_for_each_safe(node,safe,head) for(node=(head)->next,safe=node->next;node!=(head);node=safe,safe=node->next)
