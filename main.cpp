@@ -7,7 +7,10 @@
 #include <stack>
 #include <queue>
 #include <climits>
+#include <sstream>
 #include <map>
+#include <unordered_map>
+
 
 using namespace std;
 
@@ -1225,12 +1228,276 @@ long long coloredcells_v2(int n){
     return curr;
 }
 
+void print_vector(vector<vector<int>> &v){
+    for(auto i:v){
+        for(auto j:i){
+            cout<<j<<" ";
+        }
+        cout<<endl;
+    }
+    cout<<endl;
+}
+
+void print_freq_str(const string &str){
+    unordered_map<string,int> wordfreq;
+
+    stringstream ss(str);
+
+    string word;
+
+    while(ss>>word){
+        wordfreq[word]++;
+    }
+
+    unordered_map<string,int>::iterator it;
+    for(it=wordfreq.begin();it!=wordfreq.end();it++){
+        cout<<"("<<it->first<<", "<<it->second<<")"<<endl;
+    }
+
+}
+
+void pushzerostoend(vector<int> &arr){
+    int n=arr.size();
+    vector<int> temp(n);
+
+    int j=0;
+
+    for(int i=0;i<n;i++){
+        if (arr[i]!=0){
+            temp[j++]=arr[i];
+        }
+    }
+
+    while(j<n){
+        temp[j++]=0;
+    }
+
+    for(int i=0;i<n;i++){
+        arr[i]=temp[i];
+    }
+}
+
+void pushzerostoend_v2(vector<int> &arr){
+    int count=0;
+
+    for(int i=0;i<arr.size();i++){
+        if (arr[i]!=0){
+            arr[count++]=arr[i];
+        }
+    }
+
+    while(count<arr.size()){
+        arr[count++]=0;
+    }
+}
+
+void pushzersotoend_v3(vector<int> &arr){
+    int count=0;
+
+    for (int i=0;i<arr.size();i++){
+        if (arr[i]!=0){
+            swap(arr[i],arr[count]);
+            count++;
+        }
+    }
+}
+
+void pushzerostoend_v4(vector<int> &arr){
+    stable_partition(arr.begin(),arr.end(),[](int n){return n!=0;});
+}
+
+void segregate_even_odd(vector<int> &arr){
+    int low=0,hi=arr.size()-1;
+
+    while(low<hi){
+        while(arr[low]%2==0&&low<hi){
+            low++;
+        }
+
+        while(arr[hi]%2==1&&low<hi){
+            hi--;
+        }
+
+        if (low<hi){
+            swap(arr[low],arr[hi]);
+            low++;
+            hi--;
+        }
+    }
+}
+
+void segregate(vector<int> &arr){
+    int lo=0,hi=arr.size()-1;
+
+    while(hi>=lo){
+        if (arr[lo]%2!=0){
+            if (arr[hi]%2==0){
+                swap(arr[lo],arr[hi]);
+                lo++;
+                hi--;
+            }else{
+                hi--;
+            }
+        }else{
+            lo++;
+        }
+    }
+}
+
+void re_arrange_even_odd(vector<int> v){
+    stable_partition(v.begin(),v.end(),[](auto a){return a%2==0;});
+}
+
+#define max_char 26
+void sortstring(string &s){
+    int charcount[max_char]={0};
+
+    for(int i=0;i<s.length();i++){
+        charcount[s[i]-'a']++;
+    }
+
+    for(int i=0;i<max_char;i++){
+        for(int j=0;j<charcount[i];j++){
+            cout<<(char)('a'+i);
+        }
+    }
+}
+
+void sortRows(vector<vector<int>> &mat){
+    for (auto &row:mat){
+        sort(row.begin(),row.end());
+    }
+}
+
+void sortmatrix(vector<vector<int>> &mat){
+    vector<int> temp;
+    for(auto &row:mat){
+        for(int x:row){
+            temp.push_back(x);
+        }
+    }
+
+    sort(temp.begin(),temp.end());
+
+    int k=0;
+    for(auto &row:mat){
+        for(int &x:row){
+            x=temp[k++];
+        }
+    }
+}
+
+
+void merge_Arrays(vector<int> &arr1,vector<int>&arr2,vector<int>&arr3){
+    int n1=arr1.size();
+    int n2=arr2.size();
+    int i=0,j=0,k=0;
+
+    while(i<n1){
+        arr3[k++]=arr1[i++];
+    }
+
+    while(j<n2){
+        arr3[k++]=arr2[j++];
+    }
+
+    sort(arr3.begin(),arr3.end());
+}
+
+void merge_Arrays_v2(vector<int>&arr1,vector<int> &arr2,vector<int> &arr3){
+    int i=0,j=0,k=0;
+    int n1=arr1.size();
+    int n2=arr2.size();
+
+    while(i<n1&&j<n2){
+        if (arr1[i]<arr2[j]){
+            arr3[k++]=arr1[i++];
+        }else{
+            arr3[k++]=arr2[j++];
+        }
+    }
+
+    while (i<n1){
+        arr3[k++]=arr1[i++];
+    }
+
+    while(j<n2){
+        arr3[k++]=arr2[j++];
+    }
+}
+
+bool comp_upper_bound(const string& a,const string &b){
+    return lexicographical_compare(a.begin(),a.end(),b.begin(),b.end(),[]
+                                (char c1,char c2){return tolower(c1)<tolower(c2);});
+}
+
+bool checkInclusion(string s1, string s2) {
+
+    unordered_map<char,int> need,window;
+    
+    for(char c:s1) need[c]++;
+
+    int valid=0;
+    int left=0,right=0;
+
+    while(right<s2.size()){
+        char new_node=s2[right];
+
+        if (need.count(new_node)){
+            window[new_node]++;
+            if (window[new_node]==need[new_node]){
+                valid++;
+            }
+            if (valid==need.size()){
+                return true;
+            }
+        }
+
+        right++;
+
+        while (right-left>=s1.size()){
+            char remove_node=s2[left];
+            left++;
+            if (need.count(remove_node)){
+                if (window[remove_node]==need[remove_node]){
+                    valid--;
+                }
+                window[remove_node]--;
+            }
+        }
+    }
+    
+    return false;
+
+}
+
+
+int bst(vector<int> &nums,int left,int right,int x){
+    while(left<=right){
+        int mid=left+(right-left)/2;
+
+        if (nums[mid]==x){
+            return mid;
+        }
+        else if (nums[mid]<x){
+            left=mid+1;
+        }
+        else{
+            right=mid-1;
+        }
+    }
+
+    return -1;
+}
+
+
+
 int main(){
 
-    long long number=100;
-
-
-    cout<<coloredcells_v2(number)<<endl;
-
+   
+    
+    
+        
     return 0;
+
 }
