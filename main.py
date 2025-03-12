@@ -927,19 +927,24 @@ from random import randint
 
 
 
-class die():
+# class die():
 
-    def __init__(self,sides=6):
-        self.sides=sides
+#     def __init__(self,sides=6):
+#         self.sides=sides
 
-    def roll_die(self):
+#     def roll_die(self):
         
-        for i in range(0,10):
-            x=randint(1,self.sides)
+#         for i in range(0,10):
+#             x=randint(1,self.sides)
             
-            print(x)
+#             print(x)
             
 
-d=die(10)
-d.roll_die()
+# d=die(10)
+# d.roll_die()
         
+n=2
+
+base = n**2*(n**2+1)//2
+
+print(base)
