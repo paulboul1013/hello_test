@@ -1,48 +1,49 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include <fcntl.h>
 
-
-int add(int x,int y){
-    return x+y;
+void die(char *msg){
+    printf("%s\n",msg);
+    exit(1);
 }
 
-double fun2(int n){
-    int i;
-    double k;
-    double sum=0;
-    for (i=1;i<=n;i+=2){
-        k=(double) 1/i;
-        sum+=k;
+int src;//print source
+int elf;//print ELF(The Executable and Linkable Format) format
+
+int main(int argc,char **argv) {
+#if defined(__x86_64__) || defined(__aarch64__)
+#define int long
+#endif  
+    
+    printf("argc:%d\n",argc);
+    for(int i=0;i<argc;i++){
+        printf("argv[%d]:%s\n",i,argv[i]);
     }
 
-    return sum;
-}
-
-double fun1(int n){
-    int i;
-    double k;
-    double sum=0;
-    for (i=2;i<=n;i+=2){
-        k=(double) 1/i;
-        sum+=k;
+    --argc,++argv;
+    if (argc>0 && **argv=='-' && (*argv)[1]=='s'){
+        src=1
+        printf("source get\n");
+        --argc,++argv;
     }
 
-    return sum;
-}
+    if (argc > 0 && **argv=='-' && (*argv)[1]=='o'){
+        
+        --argc,++argv;
+    }
 
-int main(){
+    if (argc<1){
+        die("usage:ammacc[-s ][-o object] file");
+    }
 
-    
-    int a=100;
-    int *p1=&a;
-    int **p2=&p1;
+    int fd;
+    if ((fd=open(*argv,0))<0){
+        printf("could not open(%s)\n",*argv);
+        return -1;
+    }
 
-    printf("%x",&a);
-    printf("%x",*p2);
-
-    
     return 0;
-}
+    
 
+}
