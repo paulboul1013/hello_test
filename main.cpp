@@ -1,1503 +1,223 @@
+#include <functional>
 #include <iostream>
+#include <numeric>
+#include <string>
 #include <vector>
-#include <algorithm>
-#include <unordered_set>
-#include <list>
-#include <cstring>
-#include <stack>
-#include <queue>
-#include <climits>
-#include <sstream>
-#include <map>
-#include <unordered_map>
 
 
 using namespace std;
 
-class Node{
-    public:
-        int data;
-        Node *next;
-
-        Node(int x){
-            data=x;
-            next=nullptr;
-        }
-};
-
-Node * sortedmerge(Node *head1,Node *head2){
-    vector<int> arr;
-    
-    while(head1!=nullptr){
-        arr.push_back(head1->data);
-        head1=head1->next;
+int computexor_v1(int n){
+    int res=0;
+    for(int i=1;i<=n;i++){
+        res=res^i;
     }
-
-    while(head2!=nullptr){
-        arr.push_back(head2->data);
-        head2=head2->next;
-    }
-
-    sort(arr.begin(),arr.end());
-
-    Node *dummy=new Node(-1);
-    Node *curr=dummy;
-
-    for(int i=0;i<arr.size();i++){
-        curr->next=new Node(arr[i]);
-        curr=curr->next;
-    }
-
-    return dummy->next;
-
-    
+    return res;
 }
 
-Node * sorted_merge_2(Node *head1,Node *head2){
-    if (head1==nullptr){
-        return head2;
+int computexor(int n){
+    if (n%4==0){
+        return n;
     }
-    if (head2==nullptr){
-        return head1;
+    if (n%4==1){
+        return 1;
     }
-
-    if (head1->data<=head2->data){
-        head1->next=sorted_merge_2(head1->next,head2);
-        return head1;
-    }else{
-        head2->next=sorted_merge_2(head1,head2->next);
-        return head2;
+    if (n%4==2){
+        return n+1;
+    }
+    else{
+        return 0;
     }
 }
 
-Node *removeduplicates(Node *head){
-    unordered_set<int> st;
-
-    Node *new_head=nullptr;
-    Node *tail=nullptr;
-
-    Node *curr=head;
-
-    while(curr!=nullptr){
-
-        if (st.find(curr->data)==st.end()){
-            Node *new_Node=new Node(curr->data);
-        
-            if (new_head==nullptr){
-                new_head=new_Node;
-                tail=new_head;
-            }else{
-                tail->next=new_Node;
-                tail=new_Node;
-            }
-            st.insert(curr->data);
+int countvalues(int n){
+    int unset_bits=0;
+    while (n){
+        if ((n&1)==0){
+            unset_bits++;
         }
-
-        curr=curr->next;
-      
+        n=n>>1;
     }
 
-    return new_head;
-
+    return 1<<unset_bits;
 }
 
-Node * removeduplicates_2(Node *head){
-    Node * curr=head;
-    while(curr!=NULL&&curr->next!=NULL){
-        if (curr->data==curr->next->data){
-            Node *next_next=curr->next->next;
-            curr->next=next_next;
-        }else{
-            curr=curr->next;
-        }
-
-    }
-
-    return head;
+bool ispoweroftwo(int x){
+    return x&& (!(x&(x-1)));
 }
 
-Node *get_tail(Node *curr){
-    while(curr!=nullptr&&curr->next!=nullptr){
-        curr=curr->next;
+int findxor(int set[],int n){
+    if (n==1){
+        return set[0];
     }
-    return curr;
-}
-
-Node *partition(Node *head,Node *tail){
-    Node *pivot=head;
-
-    Node *pre=head;
-    Node *curr=head;
-
-    while(curr!=tail->next)
-    {
-        
-        if (curr->data<pivot->data){
-            swap(curr->data,pre->next->data);
-
-            pre=pre->next;
-        }
-
-        curr=curr->next;
-    }
-  
-    
-
-    
-
-    swap(pivot->data,pre->data);
-
-    return pre;
-}
-
-void quicksorthelper(Node * head,Node *tail){
-    if (head==nullptr||head==tail){
-        return;
-    }
-
-    Node *pivot=partition(head,tail);
-
-    quicksorthelper(head,pivot);
-
-    quicksorthelper(pivot->next,tail);
-}
-
-Node *quicksort(Node *head){
-    Node *tail=get_tail(head);
-    quicksorthelper(head,tail);
-    return head;
-}
-
-void printlist(Node *curr){
-    while(curr!=nullptr){
-        cout<<curr->data;
-        if (curr->next!=nullptr){
-            cout<<" ";
-        }
-        curr=curr->next;
-    }
-    cout<<endl;
-}
-
-Node *rotate(Node *head,int k){
-    if (k==0||head==nullptr){
-        return head;
-    }
-    
-    for(int i=0;i<k;i++){
-        Node *curr=head;
-        while (curr->next!=nullptr){
-            curr=curr->next;
-        }
-        
-        curr->next=head;
-        curr=curr->next;
-        head=head->next;
-        curr->next=nullptr;
-        
-        
-    }
-    return head;
-}
-
-Node *rotate_2(Node* head,int k){
-    if (k==0||head==nullptr){
-        return head;
-    }
-
-    Node * curr=head;
-    int len=1;
-
-    while(curr->next!=nullptr){
-        curr=curr->next;
-        len+=1;
-    }
-
-    k%=len;
-
-    curr->next=head;
-
-    for(int i=1;i<k;i++){
-        curr=curr->next;
-    }
-
-    head=curr->next;
-
-    curr->next=nullptr;
-
-    return head;
-}
-
-bool detectloop(Node *head){
-    unordered_set<Node*> st;
-
-    while (head!=nullptr){
-        if (st.find(head)!=st.end()){
-            return true;
-        }
-        st.insert(head);
-        head=head->next;
-    }
-
-    return false;
-}
-
-bool detectloop_2(Node *head){
-
-    Node *slow=head,*fast=head;
-
-    while(slow&&fast&&fast->next){
-        slow=slow->next;
-        fast=fast->next->next;
-
-        if (slow==fast){
-            return true;
-        }
-    }
-
-    return false;
-
-}
-
-int cmp(const int &a,const int &b){
-    return a>b;
-}
-
-int search(vector<int>&nums,int target){
-    int left=0;
-    int right=nums.size()-1;
-    while(left<=right){
-        int middle=left+((right-left)/2);
-        if (nums[middle]>target){
-            right=middle-1;
-        }else if (nums[middle]<target){
-            left=middle+1;
-        }else{
-            return middle;
-        }
-    }
-
-    return -1;
-}
-
-int search_2(vector<int>&nums,int target){
-
-    int left=0;
-    int right=nums.size();
-    while(left<right){
-        int middle=left+((right-left)>>1);
-        if (nums[middle]>target){
-            right=middle;
-        }else if (nums[middle]<target){
-            left=middle+1;
-        }else{
-            return middle;
-        }
-    }
-
-    return -1;
-
-}
-
-int mysqrt(int x){
-    if (x == 0)
-        return x;
-    int first = 1, last = x;
-    while (first <= last) {
-    int mid = first + (last - first) / 2;
-
-    if (mid  == x / mid)
-        return mid;
-    else if (mid > x / mid) {
-        last = mid - 1;
-    }
-    else {
-        first = mid + 1;
-    }
-}
-return last;
-}
-
-
-class box{
-    public:
-        static int objectcount;
-
-        box(double l=2.0,double b=2.0,double h=2.0){
-            cout<<"constructor called."<<endl;
-            length=l;
-            breadth=b;
-            height=h;
-
-            objectcount++;
-        }
-        double getvolume(void){
-            return  length*breadth*height;
-        }
-        void setlength(double len){
-            length=len;
-        }
-        void setbreath(double bre){
-            breadth=bre;
-        }
-        void setheight(double hei){
-            height=hei;
-        }
-        box operator+(const box &b){
-            box box;
-            box.length=this->length+b.length;
-            box.breadth=this->breadth+b.breadth;
-            box.height=this->height+b.height;
-            return box;
-        }
-        double volume(){
-            return length*breadth*height;
-        }
-        static int getcount(){
-            return objectcount;
-        }
-        private:
-            double length;
-            double breadth;
-            double height;
-};
-
-
-
-int box::objectcount=0;
-
-class shape
-{
-    public:
-        void setwidth(int w){
-            width=w;
-        }
-        void setheight(int h){
-            height=h;
-        }
-    protected:
-        int width;
-        int height;
-};
-
-class paintcost{
-    public:
-        int getcost(int area){
-            return area*70;
-        }
-};
-
-class rectangle:public shape,public paintcost{
-    public:
-        int getarea(){
-            return (width*height);
-        }
-        
-};
-
-
-class printdata{
-    public:
-        void print(int i){
-            cout<<"integer:"<<i<<endl;
-        }
-        void print(double f){
-            cout<<"float:"<<f<<endl;
-        }
-        void print(char c[]){
-            cout<<"string:"<<c<<endl;
-        }
-};
-
-class Distance{
-    private:
-        int feet;
-        int inches;
-    public:
-        Distance(){
-            feet=0;
-            inches=0;
-        }
-        Distance(int f,int i){
-            feet=f;
-            inches=i;
-        }
-        void displaydistance(){
-            cout<<"F: "<<feet<<" I: "<<inches<<endl;
-        }
-        Distance operator- (){
-            feet=-feet;
-            inches=-inches;
-            return Distance(feet,inches);
-        }
-};
-
-class Time{
-    private:
-        int hours;
-        int minutes;
-    public:
-        Time(){
-            hours=0;
-            minutes=0;
-        }
-        Time(int h,int m){
-            hours=h;
-            minutes=m;
-        }
-
-        void show_time(){
-            cout<<"H: "<<hours<<" M:"<<minutes<<endl;
-        }
-
-        Time operator++(){
-            ++minutes;
-
-            if (minutes>=60){
-                ++hours;
-                minutes-=60;
-            }
-
-            return Time(hours,minutes);
-        }
-
-        Time operator++(int){
-            Time T(hours,minutes);
-
-            ++minutes;
-
-            if (minutes>=60){
-                ++hours;
-                minutes-=60;
-            }
-
-            return T;
-        }
-
-        
-};
-
-void bubblesort(int *arr,int len){
-    for(int i=0;i<len-1;i++){
-        for(int j=0;j<len-1-i;j++){
-            if (arr[j]>arr[j+1]){
-                int temp=arr[j];
-                arr[j]=arr[j+1];
-                arr[j+1]=temp;
-            }
-        }
+    else{
+        return 0;
     }
 }
 
-void printarray(int arr[],int len){
-    for(int i=0;i<len;i++){
-        cout<<arr[i]<<" ";
-    }
-    cout<<endl;
+int setbitnumber(int n){
+    n|=n>>1;
+    n|=n>>2;
+    n|=n>>4;
+    n|=n>>8;
+    n|=n>>16;
+
+    n=n+1;
+    return (n>>1);
 }
 
-struct student{
-    string name;
-    int age;
-    int score;
-}stu3;
-
-
-int *funct(){
-    int *a=new int(10);
-    return a;
-}
-
-void func(int &ref){
-    ref=100;
-}
-
-void show_value(const int &v){
-    cout<<v<<endl;
-}
-
-string find_LCS(string str1,string str2){
-    int len1=str1.size();
-    int len2=str2.size();
-
-    vector<vector<int>> dp(len1+1,vector<int>(len2+1,0));
-
-    for(int i=1;i<=len1;i++){
-        for(int j=1;j<=len2;j++){
-            if (str1[i-1]==str2[j-1]){
-                dp[i][j]=dp[i-1][j-1]+1;
-            }else{
-                dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
-            }
-        }
-    }
-
-    string lcs;
-
-    int i=len1,j=len2;
-    while(i>0&&j>0){
-        if (str1[i-1]==str2[j-1]){
-            lcs.push_back(str1[i-1]);
-            --i;
-            --j;
-        }
-        else if (dp[i-1][j]>dp[i][j-1]){
-            --i;
-        }else{
-            --j;
-        }
-     
-
-    }
-    reverse(lcs.begin(),lcs.end());
-    return lcs;
-}
-
-Node * reverse_k_group(Node *head,int k){
-    if (!head||k==1){
-        return head;
-    }
-
-    stack<Node*> st;
-    Node *curr=head;
-    Node *prev=nullptr;
-
-    while(curr!=nullptr){
-        int count=0;
-
-        while(curr!=nullptr&&count<k){
-            st.push(curr);
-            curr=curr->next;
-            count++;
-        }
-
-        while(!st.empty()){
-            if (prev==nullptr){
-                prev=st.top();
-                head=prev;
-                st.pop();
-            }else{
-                prev->next=st.top();
-                prev=prev->next;
-                st.pop();
-            }
-        }
-    }
-
-    prev->next=nullptr;
-
-    return head;
-}
-
-Node *reverse_k_group_2(Node *head,int k){
-    if (head==nullptr){
-        return head;
-    }
-
-    Node *curr=head;
-    Node *new_head=nullptr;
-    Node *tail=nullptr;
-
-
-    while(curr!=nullptr){
-        Node *group_head=curr;
-        Node *prev=nullptr;
-        Node *next_node=nullptr;
-        int count=0;
-
-        while(curr!=nullptr&&count<k){
-            next_node=curr->next;
-            curr->next=prev;
-            prev=curr;
-            curr=next_node;
-            count++;
-        }
-
-        if (new_head==nullptr){
-            new_head=prev;
-        }
-
-        if (tail!=nullptr){
-            tail->next=prev;
-        }
-
-        tail=group_head;
-    }
-
-    return new_head;
-    
-}
-
-class STACK{
-    private:
-        Node *head;
-
-    public:
-        STACK(){
-            this->head=nullptr;
-        }
-
-        bool isempty(){
-            return head==nullptr;
-        }
-
-        void push(int new_data){
-            Node *new_node=new Node(new_data);
-
-            if (!new_node){
-                cout<<"\nStack overflow"<<endl;
-            }
-
-            new_node->next=head;
-
-            head=new_node;
-            
-        }
-
-        void pop(){
-            if (this->isempty()){
-                cout<<"\nstack underflow"<<endl;
-            }else{
-                Node *temp=head;
-
-                head=head->next;
-
-                delete temp;
-            }
-        }
-
-        int peek(){
-            if (!isempty()){
-                return head->data;
-            }else{
-                cout<<"\nstack is empty"<<endl;
-                return INT_MIN;
-            }
-        }
-};
-
-class QUEUE{
-    Node *front,*rear;
-
-    public:
-        QUEUE(){
-            front=rear=nullptr;
-        }
-
-        bool isempty(){
-            if (front==nullptr){
-                return true;
-            }
-
-            return false;
-        }
-
-        void enqueue(int new_data){
-            Node *new_node=new Node (new_data);
-
-            if (this->isempty()){
-                front=rear=new_node;
-                return;
-            }
-
-            rear->next=new_node;
-            rear=new_node;
-        }
-
-        void dequeue(){
-            if (this->isempty()){
-                cout<<"Queue underflow\n";
-                return;
-            }
-
-            Node *temp=front;
-            front=front->next;
-
-            if (front==nullptr){
-                rear=nullptr;
-            }
-
-            delete temp;
-        }
-
-        int getfront(){
-            if (this->isempty()){
-                return INT_MIN;
-            }
-
-            return front->data;
-        }
-
-        int getrear(){
-            if (this->isempty()){
-                cout<<"queue is empty"<<endl;
-                return INT_MIN;
-            }
-
-            return rear->data;
-        }
-};
-
-
-vector<vector<int>> merge_arrays(vector<vector<int>>&nums1,vector<vector<int>>&nums2){
-    map<int,int> sum;
-
-    for(auto nums:nums1){
-        sum[nums[0]]=nums[1];
-    }
-
-    for(auto nums:nums2){
-        sum[nums[0]]+=nums[1];
-    }
-
-    vector<vector<int>> merge;
-
-    for(auto it:sum){
-        merge.push_back({it.first,it.second});
-    }
-
-    return merge;
-}
-
-void test_merge_array(){
-    vector<vector<int>> v1;
-
-    v1={{1,2},
-        {2,3},
-        {4,5}};
-
-    vector<vector<int>> v2;
-    v2={
-        {1,4},
-        {3,2},
-        {4,1}
-
-    };
-    vector<vector<int>>::iterator it;
-
-    vector<vector<int>> v3;
-    v3=merge_arrays(v1,v2);
-
-
-    cout<<v3.size()<<endl;
-
-    for(it=v3.begin();it!=v3.end();it++){
-
-        vector<int> inner=*it;
-        
-        for(vector<int>::iterator it=inner.begin();it!=inner.end();++it){
-            cout<<" "<<*it;
-        }
-        cout<<endl;
-    }
-    cout<<endl;
-}
-
-bool bfs(int start,vector<vector<int>> &adj,vector<bool> &visited){
-    queue<pair<int,int>> q;
-    q.push({start,-1});
-    visited[start]=true;
-
-    while(!q.empty()){
-        int node=q.front().first;
-        int parent=q.front().second;
-        q.pop();
-
-        for(int neighbor:adj[node]){
-            if (!visited[neighbor]){
-                visited[neighbor]=true;
-                q.push({neighbor,node});
-            }
-
-            else if (neighbor!=parent){
-                return true;
-            }
-        }
-
-        
-    }
-
-    return false;
-
-    
-}
-
-bool iscycle(vector<vector<int>> & adj){
-    int n=adj.size();
-    vector<bool> visited(n,false);
-
-    for(int i=0;i<n;i++){
-        if (!visited[i]){
-            if (bfs(i,adj,visited)){
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
-void bsf_for_search(vector<vector<int>> &adj,int s){
-    queue<int> q;
-
-    vector<bool> visisted(adj.size(),false);
-
-    visisted[s]=true;
-    q.push(s);
-    
-    while(!q.empty()){
-        int curr=q.front();
-        q.pop();
-
-        cout<<curr<<" ";
-
-        for(int node:adj[curr]){
-            if(!visisted[node]){
-                visisted[node]=true;
-                q.push(node);
-            }
-        }
-    }
-}
-
-void add_edge(vector<vector<int>> &adj,int u,int v){
-    adj[u].push_back(v);
-    adj[v].push_back(u); //undirected graph
-}
-
-
-void bfs_for_disconnected(vector<vector<int>> &adj,int s,vector<bool> &visisted){
-    queue<int> q;
-    visisted[s]=true;
-    q.push(s);
-
-    while(!q.empty()){
-        int curr=q.front();
-        q.pop();
-        cout<<curr<<" ";
-
-        for(int node:adj[curr]){
-            if (!visisted[node]){
-                visisted[node]=true;
-                q.push(node);
-            }
-        }
-    }
-}
-
-void bfs_disconnected(vector<vector<int>> &adj){
-    vector<bool> visisted(adj.size(),false);
-
-    for(int i=0;i<adj.size();i++){
-        if (!visisted[i]){
-            bfs_for_disconnected(adj,i,visisted);
-        }
-    }
-}
-
-class tree_node{
-  public:
-    int data;
-    tree_node *left,*right;
-    
-    tree_node(int x){
-        data=x;
-        left=right=nullptr;
-    }
-};
-
-
-void recursive_right_view(tree_node *root,int level,int &maxlevel,vector<int> &result){
-    if (!root)return;
-
-    if (level>maxlevel){
-        result.push_back(root->data);
-        maxlevel=level;
-    }
-
-    recursive_right_view(root->right,level+1,maxlevel,result);
-
-    recursive_right_view(root->left,level+1,maxlevel,result);
-
-
-}
-
-vector<int> rightview(tree_node *root){
-    vector<int> result;
-
-    int maxlevel=-1;
-
-    recursive_right_view(root,0,maxlevel,result);
-
-    return result;
-}
-
-void printarray(vector<int> &arr){
-    for(auto val:arr){
-        cout<<val<<" ";
-    }
-    cout<<endl;
-}
-
-int partition(vector<int>&arr,int low,int high){
-    int pivot=arr[high];
-
-    int i=low-1;
-
-    for(int j=low;j<=high;j++){
-        if (arr[j]<pivot){
-            i++;
-            swap(arr[i],arr[j]);
-        }
-    }
-
-    swap(arr[i+1],arr[high]);
-    return i+1;
-}
-
-int partition_r(vector<int> &arr,int low,int high);
-
-void quicksort(vector<int> &arr,int low,int high){
-    if (low<high){
-        int pi=partition(arr,low,high);
-
-        quicksort(arr,low,pi-1);
-        quicksort(arr,pi+1,high);
-    }
-}
-
-void heapify(vector<int>&arr,int n,int i){
-    int largest=i;
-
-    int l=2*i+1;
-
-    int r=2*i+2;
-
-    if (l<n&&arr[l]>arr[largest]){
-        largest=l;
-    }
-
-    if (r<n&&arr[r]>arr[largest]){
-        largest=r;
-    }
-
-    if (largest!=i){
-        swap(arr[i],arr[largest]);
-
-        heapify(arr,n,largest);
-    }
-}
-
-void heapsort(vector<int>&arr){
-    int n=arr.size();
-
-    for(int i=n/2-1;i>=0;i--){
-        heapify(arr,n,i);
-    }
-
-    for(int i=n-1;i>0;i--){
-        swap(arr[0],arr[i]);
-        heapify(arr,i,0);
-    }
-}
-
-void merge(vector<int>&arr,int left,int mid,int right){
-    int n1=mid-left+1;
-    int n2=right-mid;
-
-    vector<int> L(n1),R(n2);
-
-    for(int i=0;i<n1;i++){
-        L[i]=arr[left+i];
-    }
-    for(int j=0;j<n2;j++){
-        R[j]=arr[mid+1+j];
-    }
-
-    int i=0,j=0;
-    int k=left;
-
-    while (i<n1&&j<n2){
-        if (L[i]<=R[j]){
-            arr[k]=L[i];
-            i++;
-        }else{
-            arr[k]=R[j];
-            j++;
-        }
-        k++;
-    }
-
-    while(i<n1){
-        arr[k]=L[i];
-        i++;
-        k++;
-    }
-
-    while(j<n2){
-        arr[k]=R[j];
-        j++;
-        k++;
-    }
-    
-}
-
-void mergesort(vector<int>&arr,int left,int right){
-    if (left>=right){
-        return;
-    }
-    int mid=left+(right-left)/2;
-    mergesort(arr,left,mid);
-    mergesort(arr,mid+1,right);
-    merge(arr,left,mid,right);
-}
-
-void insertsort(vector<int> &arr,int n){
-    for(int i=1;i<n;i++){
-        int key=arr[i];
-
-        int j=i-1;
-        while(j>=0&&arr[j]>key){
-            arr[j+1]=arr[j];
-            j--;
-        }
-        arr[j+1]=key;
-    }
-
-}
-
-const int run=32;
-
-void insertion_sort_v2(int arr[],int left,int right){
-    for(int i=left+1;i<=right;i++){
-        int temp=arr[i];
-        int j=i-1;
-        while(j>=left&&arr[j]>temp){
-            arr[j+1]=arr[j];
-            j--;
-        }
-        arr[j+1]=temp;
-    }
-}
-
-void merge_v2(int arr[],int l,int m,int r){
-    int len1=m-l+1;
-    int len2=r-m;
-    int left[len1];
-    int right[len2];
-    for(int i=0;i<len1;i++){
-        left[i]=arr[l+i];
-    }
-    for(int i=0;i<len2;i++){
-        right[i]=arr[m+1+i];
-    }
-
-    int i=0;
-    int j=0;
-    int k=l;
-
-    while(i<len1&&j<len2){
-        if (left[i]<=right[j]){
-            arr[k]=left[i];
-            i++;
-        }
-        else{
-            arr[k]=right[j];
-            j++;
-        }
-        k++;
-    }
-
-    while(i<len1){
-        arr[k]=left[i];
-        i++;
-        k++;
-    }
-    while(j<len2){
-        arr[k]=right[j];
-        j++;
-        k++;
-    }
-
-}
-
-
-void timsort(int arr[],int n){
-    for(int i=0;i<n;i+=run){
-        insertion_sort_v2(arr,i,min((i+run-1),(n-1)));
-    }
-
-    for(int size=run;size<n;size=2*size){
-        for(int left=0;left<n;left+=2*size){
-            int mid=left+size-1;
-
-            int right=min((left+2*size-1),(n-1));
-
-            if (mid<right){
-                merge_v2(arr,left,mid,right);
-            }
-        }
-    }
-
-}
-
-//use pivot to split two less pivot than array or bigger than pivot array 
-vector<int> pivotArray(vector<int> & nums,int pivot){
-    vector<int> result(nums.size(),0);
-
-    int left=0;
-    int right=nums.size()-1;
-
-    //check numbers to less than pivot array or bigger than pivot array
-    for(int i=0,j=nums.size()-1;i<nums.size()-1;++i,--j){
-        if (nums[i]<pivot){
-            result[left]=nums[i];
-            left++;
-        }
-
-        if (nums[j]>pivot){
-            result[right]=nums[i];
-            right--;
-        }
-    }
-
-    //insert pivot to correct index , maybe have same pivot number
-    while (left<=right){
-        result[left]=pivot;
-        left++;
-    }
-
-    return result;
-}
-
-//newton way sqrt
-int newton_sqrt(int n){
+int setbitnumber_v2(int n){
     if (n==0){
         return 0;
     }
-    if (n<4){
-        return 1;
+
+    int msb=0;
+    n=n/2;
+    while (n!=0){
+        n=n/2;
+        msb++;
     }
+    return (1<<msb);
+}
 
-    unsigned int ans=n/2;
+int setbitnumber_v3(int n){
+    int k=__builtin_clz(n);
+    
+    return 1<<(31-k);
+}
 
-    if (ans>65535){ //protect overflow
-        ans=65535;
+static bool allbitsareset(int n){
+    if (((n+1)&n)==0){
+        return true;
     }
-
-    while (ans * ans > n || (ans + 1 )*(ans+1) <= n){
-        ans=(ans+n/ans)/2;
+    else{
+        return false;
     }
+}
 
+bool bitsareinaltorder(unsigned int n){
+
+    unsigned int num=n^(n>>1);
+    return allbitsareset(num);
+
+}
+
+void set(int &num,int pos)
+{
+    num|=(1<<pos);
+}
+
+void unset(int &num,int pos){
+    num&=(~(1<<pos));
+}
+void toggle(int &num,int pos){
+    num^=(1<<pos);
+}
+
+bool at_position(int num,int pos){
+    bool bit=num&(1<<pos);
+    return bit;
+}
+
+void strip_last_set_bit(int &num){
+    num=num&(num-1);
+}
+
+int lowest_set_bit(int num){
+    int ret=num&(-num);
+    return ret;
+}
+
+string getbinaryrep(int n){
+    string ans="";
+
+    for(int i=31;i>=0;i--){
+        if (n&(1<<i)){
+            ans+='1';
+        }
+        else{
+            ans+='0';
+        }
+    }
     return ans;
 }
 
-float Q_rsqrt( float number )
-{
-	long i;
-	float x2, y;
-	const float threehalfs = 1.5F;
+string getbinaryrep_v2(int n){
+    string ans="";
+    for(int i=0;i<32;i++){
+        ans+='0';
+    }
 
-	x2 = number * 0.5F;
-	y  = number;
-	i  = * ( long * ) &y;						// evil floating point bit level hacking
-	i  = 0x5f3759df - ( i >> 1 );               // what the fuck?
-	y  = * ( float * ) &i;
-	y  = y * ( threehalfs - ( x2 * y * y ) );   // 1st iteration
-//	y  = y * ( threehalfs - ( x2 * y * y ) );   // 2nd iteration, this can be removed
+    for(int i=0;i<32;i++){
+        if (n%2==1){
+            ans[31-i]='1';
+        }
+        n/=2;
+    }
+}
+
+int gcd(int a,int b){
+    if (a==b){
+        return b;
+    }
+    return (a>b)? gcd(a-b,b):gcd(a,b-a);
+}
+
+int gcd_v2(int a,int b){
+    if (a==0){
+        return b;
+    }
+    return gcd_v2(b%a,a);
+}
+
+int gcd_v3(int a,int b){
+    if (b==0||a==b){
+        return a;
+    }
+    if (a==0){
+        return b;
+    }
+
+    if ((a&1)==0&&(b&1)==0){
+        return gcd_v3(a>>1,b>>1)<<1;
+    }
+
+    if ((a&1)==0&&(b&1)==1){
+        return gcd_v3(a>>1,b);
+    }
+
+    if ((a&1)==1&&(b&1)==0){
+        return gcd_v3(a,b>>1);
+    }
+
+    return (a>b) ? gcd_v3(a-b,b):gcd(a,b-a);
     
-	return y;
 }
 
-
-//n分鐘有多少方塊產生
-
-long long coloredcells(int n){
-    if (n==1) return 1;
-    return coloredcells(n-1)+4*(n-1);
+bool detect_two_have_opposite_signs(int x,int y){
+    bool f=((x^y)<0);
+    return f;
 }
 
-long long coloredcells_v2(int n){
-    long long prev1=1;
-    long long curr=prev1;
-    for(int i=2;i<=n;i++){
-        curr=prev1+4*(i-1);
-        prev1=curr;
-    }
-
-    return curr;
-}
-
-void print_vector(vector<vector<int>> &v){
-    for(auto i:v){
-        for(auto j:i){
-            cout<<j<<" ";
-        }
-        cout<<endl;
-    }
-    cout<<endl;
-}
-
-void print_freq_str(const string &str){
-    unordered_map<string,int> wordfreq;
-
-    stringstream ss(str);
-
-    string word;
-
-    while(ss>>word){
-        wordfreq[word]++;
-    }
-
-    unordered_map<string,int>::iterator it;
-    for(it=wordfreq.begin();it!=wordfreq.end();it++){
-        cout<<"("<<it->first<<", "<<it->second<<")"<<endl;
-    }
-
-}
-
-void pushzerostoend(vector<int> &arr){
-    int n=arr.size();
-    vector<int> temp(n);
-
-    int j=0;
-
-    for(int i=0;i<n;i++){
-        if (arr[i]!=0){
-            temp[j++]=arr[i];
-        }
-    }
-
-    while(j<n){
-        temp[j++]=0;
-    }
-
-    for(int i=0;i<n;i++){
-        arr[i]=temp[i];
-    }
-}
-
-void pushzerostoend_v2(vector<int> &arr){
-    int count=0;
-
-    for(int i=0;i<arr.size();i++){
-        if (arr[i]!=0){
-            arr[count++]=arr[i];
-        }
-    }
-
-    while(count<arr.size()){
-        arr[count++]=0;
-    }
-}
-
-void pushzersotoend_v3(vector<int> &arr){
-    int count=0;
-
-    for (int i=0;i<arr.size();i++){
-        if (arr[i]!=0){
-            swap(arr[i],arr[count]);
-            count++;
-        }
-    }
-}
-
-void pushzerostoend_v4(vector<int> &arr){
-    stable_partition(arr.begin(),arr.end(),[](int n){return n!=0;});
-}
-
-void segregate_even_odd(vector<int> &arr){
-    int low=0,hi=arr.size()-1;
-
-    while(low<hi){
-        while(arr[low]%2==0&&low<hi){
-            low++;
-        }
-
-        while(arr[hi]%2==1&&low<hi){
-            hi--;
-        }
-
-        if (low<hi){
-            swap(arr[low],arr[hi]);
-            low++;
-            hi--;
-        }
-    }
-}
-
-void segregate(vector<int> &arr){
-    int lo=0,hi=arr.size()-1;
-
-    while(hi>=lo){
-        if (arr[lo]%2!=0){
-            if (arr[hi]%2==0){
-                swap(arr[lo],arr[hi]);
-                lo++;
-                hi--;
-            }else{
-                hi--;
-            }
-        }else{
-            lo++;
-        }
-    }
-}
-
-void re_arrange_even_odd(vector<int> v){
-    stable_partition(v.begin(),v.end(),[](auto a){return a%2==0;});
-}
-
-#define max_char 26
-void sortstring(string &s){
-    int charcount[max_char]={0};
-
-    for(int i=0;i<s.length();i++){
-        charcount[s[i]-'a']++;
-    }
-
-    for(int i=0;i<max_char;i++){
-        for(int j=0;j<charcount[i];j++){
-            cout<<(char)('a'+i);
-        }
-    }
-}
-
-void sortRows(vector<vector<int>> &mat){
-    for (auto &row:mat){
-        sort(row.begin(),row.end());
-    }
-}
-
-void sortmatrix(vector<vector<int>> &mat){
-    vector<int> temp;
-    for(auto &row:mat){
-        for(int x:row){
-            temp.push_back(x);
-        }
-    }
-
-    sort(temp.begin(),temp.end());
-
-    int k=0;
-    for(auto &row:mat){
-        for(int &x:row){
-            x=temp[k++];
-        }
-    }
-}
-
-
-void merge_Arrays(vector<int> &arr1,vector<int>&arr2,vector<int>&arr3){
-    int n1=arr1.size();
-    int n2=arr2.size();
-    int i=0,j=0,k=0;
-
-    while(i<n1){
-        arr3[k++]=arr1[i++];
-    }
-
-    while(j<n2){
-        arr3[k++]=arr2[j++];
-    }
-
-    sort(arr3.begin(),arr3.end());
-}
-
-void merge_Arrays_v2(vector<int>&arr1,vector<int> &arr2,vector<int> &arr3){
-    int i=0,j=0,k=0;
-    int n1=arr1.size();
-    int n2=arr2.size();
-
-    while(i<n1&&j<n2){
-        if (arr1[i]<arr2[j]){
-            arr3[k++]=arr1[i++];
-        }else{
-            arr3[k++]=arr2[j++];
-        }
-    }
-
-    while (i<n1){
-        arr3[k++]=arr1[i++];
-    }
-
-    while(j<n2){
-        arr3[k++]=arr2[j++];
-    }
-}
-
-bool comp_upper_bound(const string& a,const string &b){
-    return lexicographical_compare(a.begin(),a.end(),b.begin(),b.end(),[]
-                                (char c1,char c2){return tolower(c1)<tolower(c2);});
-}
-
-bool checkInclusion(string s1, string s2) {
-
-    unordered_map<char,int> need,window;
+int abs_my(int a){
+    unsigned int r;
+    int const mask=a>>sizeof(int)*32-1;
     
-    for(char c:s1) need[c]++;
-
-    int valid=0;
-    int left=0,right=0;
-
-    while(right<s2.size()){
-        char new_node=s2[right];
-
-        if (need.count(new_node)){
-            window[new_node]++;
-            if (window[new_node]==need[new_node]){
-                valid++;
-            }
-            if (valid==need.size()){
-                return true;
-            }
-        }
-
-        right++;
-
-        while (right-left>=s1.size()){
-            char remove_node=s2[left];
-            left++;
-            if (need.count(remove_node)){
-                if (window[remove_node]==need[remove_node]){
-                    valid--;
-                }
-                window[remove_node]--;
-            }
-        }
-    }
-    
-    return false;
-
+    r=(a+mask)^mask;
+    return r;
 }
 
-
-int bst(vector<int> &nums,int left,int right,int x){
-    while(left<=right){
-        int mid=left+(right-left)/2;
-
-        if (nums[mid]==x){
-            return mid;
-        }
-        else if (nums[mid]<x){
-            left=mid+1;
-        }
-        else{
-            right=mid-1;
-        }
-    }
-
-    return -1;
+int min_my(int x,int y){
+    return y^((x^y)&-(x<y));
 }
 
 
 
 int main(){
 
-   
+  
+
     
-    
-        
     return 0;
 
 }

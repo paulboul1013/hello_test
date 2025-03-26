@@ -1,2 +1,1 @@
-,i, divisors[0]);
-            for(int n=1;divis
+abs_v2
