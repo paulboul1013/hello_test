@@ -72,7 +72,10 @@
         "chrono": "cpp",
         "assert.h": "c",
         "fcntl.h": "c",
-        "xlocmes": "c"
+        "xlocmes": "c",
+        "locale": "c",
+        "xlocmon": "c",
+        "xloctime": "c"
     },
     "python.REPL.enableREPLSmartSend": false,
     "C_Cpp.errorSquiggles": "disabled"

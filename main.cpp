@@ -3,6 +3,7 @@
 #include <numeric>
 #include <string>
 #include <vector>
+#include <queue>
 
 
 using namespace std;
@@ -211,11 +212,60 @@ int min_my(int x,int y){
     return y^((x^y)&-(x<y));
 }
 
+vector<int> bfs(vector<vector<int>> &adj,int s){
+    int v=adj.size();
 
+    vector<int> res;
+
+    queue<int> q;
+
+    vector<bool> vistited(v,false);
+
+    vistited[s]=true;
+    q.push(s);
+
+    while (!q.empty()){
+        int curr=q.front();
+        q.pop();
+        res.push_back(curr);
+        
+        for (int x:adj[curr]){
+            if (!vistited[x]){
+                vistited[x]=true;
+                q.push(x);
+            }
+        }
+    }
+    return res;
+}
+
+void dfsrec(vector<vector<int>> &adj,vector<bool> &visisted,int s){
+    visisted[s]=true;
+
+    cout<<s<<" ";
+
+    for(int i:adj[s]){
+        if (visisted[i]==false){
+            dfsrec(adj,visisted,i);
+        }
+    }
+}
+
+void dfs(vector<vector<int>> &adj,int s){
+    vector<bool> vististed(adj.size(),false);
+    dfsrec(adj,vististed,s);
+}
 
 int main(){
 
-  
+    vector<vector<int>> adj = { {2, 3, 1}, {0},
+    {0, 4}, {0}, {2}};
+
+    int src=0;
+    dfs(adj,src);
+ 
+
+    
 
     
     return 0;
